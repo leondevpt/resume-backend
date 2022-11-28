@@ -1,0 +1,44 @@
+# "debug||develop ,release||product
+
+app:
+  "name": "users-service"
+  run_mode: "info"
+  grpc_port: "50051"
+
+log:
+  level: "info"
+  filename: "./logs/app.log"
+  max_size: 50   # M
+  max_age: 10
+  max_backups: 10
+
+db:
+  driver: mysql
+  host: 127.0.0.1
+  port: 3306
+  user: root
+  password: ChangeMe@Password
+  db_name: resume
+  max_open_conns: 20
+  max_idle_conns: 10
+  conn_max_lifetime: 300  # seconds
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  db: 0
+
+
+metrics:
+  url: 0.0.0.0:7071
+  service_name: user-service
+
+trace:
+  enable: false
+  endpoint: http://127.0.0.1:14268/api/traces
+  service_name: user-service
+
+
+consul:
+  enable: true
+  endpoint: 127.0.0.1:8500

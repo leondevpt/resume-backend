@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package resume.user.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+option go_package = "github.com/leondevpt/resume-backend";
+
+message User {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  enum role {
+    user = 0;
+    admin = 1;
+  }
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+
+message UserResponse { User user = 1; }
+
+message GenericResponse {
+  string status = 1;
+  string message = 2;
+}
+
+message SignUpUserInput {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+  string passwordConfirm = 4;
+}
+
+message SignUpUserResponse { User user = 1; }
+
+message SignInUserInput {
+  string email = 1;
+  string password = 2;
+}
+
+message SignInUserResponse {
+  string status = 1;
+  string access_token = 2;
+  string refresh_token = 3;
+}
+
+message VerifyEmailRequest { string verificationCode = 1; }
+message GetMeRequest { string Id = 1; }
+
+service UserService {
+  rpc SignUpUser(SignUpUserInput) returns (GenericResponse) {
+    // option type is http
+    option (google.api.http) = {
+      // this is url, for RESTfull/JSON api and method
+      // this line means when a HTTP post request comes with "/api/v1/balance" call this rpc method over this service
+      post: "/api/v1/signup"
+      body: "*"
+    };
+  }
+  rpc SignInUser(SignInUserInput) returns (SignInUserResponse) {
+    option (google.api.http) = {
+      // this is url, for RESTfull/JSON api and method
+      // this line means when a HTTP post request comes with "/api/v1/signin" call this rpc method over this service
+      post: "/api/v1/signin"
+      body: "*"
+    };
+  }
+
+  rpc GetMe(GetMeRequest) returns (UserResponse) {
+    // option type is http
+    option (google.api.http) = {
+      // this is url, for RESTfull/JSON api and method
+      // this line means when a HTTP post request comes with "/api/v1/me" call this rpc method over this service
+      post: "/api/v1/me"
+      body: "*"
+      additional_bindings {
+        // 定义一个 GET 接口， 映射到 GetMe
+        get: "/api/v1/me"
+      }
+    };
+  }
+}
+
+

@@ -1,0 +1,14 @@
+version: v1
+deps:
+  # adding well known types by google
+  - buf.build/googleapis/googleapis
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT
+  except:
+    - PACKAGE_VERSION_SUFFIX
+    - FIELD_LOWER_SNAKE_CASE
+    - SERVICE_SUFFIX
